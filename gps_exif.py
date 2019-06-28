@@ -7,22 +7,22 @@ from PIL.ExifTags import GPSTAGS
 import sys
 import os
 
-def get_geotags(filename):
+def get_geotags(file_path):
 
-    image = Image.open(filename)
+    image = Image.open(file_path)
     image.verify()
     exif = image._getexif()
 
     if not exif:
         print()
-        raise Exception(f"No EXIF metadata found for file {filename}")
+        raise Exception(f"No EXIF metadata found for file {file_path}")
 
     geotags = {}
     for (idx, tag) in TAGS.items():
         if tag == 'GPSInfo':
             if idx not in exif:
                 print()
-                raise Exception(f"No EXIF geotags found for file {filename}")
+                raise Exception(f"No EXIF geotags found for file {file_path}")
 
             for (key, val) in GPSTAGS.items():
                 if key in exif[idx]:
@@ -53,10 +53,14 @@ def get_coordinates(geotags):
 
 
 if __name__ == '__main__':
-    image_path = os.path.dirname(os.path.realpath(__file__)) + '\\' + sys.argv[1]
+
+    if len(sys.argv) < 2:
+      print(f"\nERROR: Not enough arguments given.\nUsage: {sys.argv[0]} relative_image_file_path\nExiting.\n")
+      sys.exit(1)
+
+    image_path = os.path.dirname(os.path.realpath(__file__)) + '/' + sys.argv[1]
     if not os.path.exists(image_path):
-        print(image_path)
-        raise Exception(f"\nFile {image_path} could not be found.\nExiting.gg\n\n")
+        print(f"\nERROR: File '{image_path}' could not be found.\nExiting.\n")
         sys.exit(1)
 
     geotags = get_geotags(image_path)
