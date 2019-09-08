@@ -25,7 +25,7 @@ if __name__ == '__main__':
 
     image_dir = os.path.dirname(os.path.realpath(__file__)) + '/' + sys.argv[1]
     if not os.path.isdir(image_dir):
-        print(f"\nERROR: Directory '{image_path}' could not be found or is not a directory.\nExiting.\n")
+        print(f"\nERROR: Directory '{image_dir}' could not be found or is not a directory.\nExiting.\n")
         sys.exit(1)
 
     image_file_names = os.listdir(image_dir)
